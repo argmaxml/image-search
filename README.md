@@ -12,7 +12,7 @@ Building a recommender system requires understanding many aspects of the user be
 
 An ideal candidate would be someone who is **proficient in python**, **curious** and able to do **independent research** when necessary.
 
-Our offices in Ramat-Gan, Jabotinsky st. 155 and we work one day a week from there, the rest of the week we work from home or from client's premises.
+Our offices in Ramat-Gan, Jabotinsky st. 155 and we work one day a week from there, the rest of the week we work from home or from clients' premises.
 
 ## Some videos from past projects
 
