@@ -8,9 +8,9 @@ This repo is meant to be a the first step in the process and it will set the sta
 ## About the position
 We are a botique service company that specializes in recommendation systems.
 
-Building a recommender system requires understanding many aspects of the user behaviour and item properties, and we utilize a variety of tools (such as computer vision, natural language processing, time series, etc).
+Building a recommender system requires understanding many aspects of the user behaviour and item properties, and we utilize a variety of tools to do so (such as computer vision, natural language processing, time series, etc).
 
-An ideal candidate would be someone who is proficient in python, curious and able to do independent research when necessary.
+An ideal candidate would be someone who is **proficient in python**, **curious** and able to do **independent research** when necessary.
 
 Our offices in Ramat-Gan, Jabotinsky st. 155 and we work one day a week from there, the rest of the week we work from home or from client's premises.
 
