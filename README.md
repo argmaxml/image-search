@@ -6,7 +6,7 @@
 This repo is meant to be a the first step in the process and it will set the stage for the interview.
 
 ## About the position
-We are a botique service company that specializes in recommendation systems.
+We are a botique service company that specialize in recommendation systems.
 
 Building a recommender system requires understanding many aspects of the user behaviour and item properties, and we utilize a variety of tools to do so (such as computer vision, natural language processing, time series, etc).
 
