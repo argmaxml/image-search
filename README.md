@@ -1,7 +1,7 @@
 # image-search task
 
 ## Who is this repo for ?
-[Argmax](https://www.argmaxml.com) are hiring Junior Data scientists.
+[Argmax](https://www.argmaxml.com) is hiring Junior Data scientists.
 
 This repo is meant to be a the first step in the process and it will set the stage for the interview.
 
