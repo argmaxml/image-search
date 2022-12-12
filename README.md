@@ -24,5 +24,8 @@ Our offices in Ramat-Gan, Jabotinsky st. 155 and we work one day a week from the
 ## Instructions notebook:
 Please read [this notebook](https://github.com/argmaxml/image-search/blob/master/notebooks/explanations.ipynb) for background, motivation and submission instructions.
 
+## Submission Deadline
+December 21st, 2022
+
 ## Schedule an interview
 Please use [this form](https://forms.gle/apMr8zPLbBf9pQY7A) to schedule an interview
