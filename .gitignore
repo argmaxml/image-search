@@ -127,3 +127,13 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+*.npy
+*.parquet
+*.csv
+data/*.json
+*:Zone.Identifier
+*.zip
+*.npy
+data/clip_emb/
+upload/
