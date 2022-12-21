@@ -1,5 +1,24 @@
-# image-search task
 
+# We are no longer accepting applications
+## Submission Deadline was Dec 21st, 2022
+Thank you for spending the time to work on this task.
+
+We have received an overwhelming amount of submissions, and reviewing all the submissions takes more time than expected.
+
+
+If you submitted the application form on time - you will be contacted shortly.
+
+In the follow up interview you will be asked to demonstrate the working web-server and extend it.
+Make sure you understand all of the code presented in this repo (including Flask, HTMX, vecsim, etc.)
+
+Please watch [this video](https://argmax.ml/jr2) before your scheduled interview.
+
+Thank you so much for your time, and keep in touch.
+
+![Argmax](https://raw.githubusercontent.com/argmaxml/image-search/master/assets/argmax.png)
+
+Original text follows:
+# image-search task
 ## Who is this repo for ?
 [Argmax](https://www.argmaxml.com) is hiring Junior Data scientists.
 
@@ -23,9 +42,3 @@ Our offices are in Ramat-Gan, Jabotinsky st. 155 and we work one day a week from
 
 ## Instructions notebook:
 Please read [this notebook](https://github.com/argmaxml/image-search/blob/master/notebooks/explanations.ipynb) for background, motivation and submission instructions.
-
-## Submission Deadline
-December 21st, 2022
-
-## Schedule an interview
-Please use [this form](https://forms.gle/apMr8zPLbBf9pQY7A) to schedule an interview
