@@ -11,12 +11,21 @@ from flask import Flask, request, send_from_directory, render_template, redirect
 from werkzeug.utils import secure_filename
 from typing import List, Dict, Tuple, Optional
 from vecsim import SciKitIndex, RedisIndex
+#CLIP
+import clip
+import torch
+from PIL import Image
+device = "cuda" if torch.cuda.is_available() else "cpu"
+model, preprocess = clip.load("ViT-B/32", device=device, jit=False)
+
+
 
 __dir__ = Path(__file__).absolute().parent
 upload_dir = __dir__ / "upload"
 data_dir = __dir__ / "data"
 upload_dir.mkdir(exist_ok=True)
 NUMBER_OF_RESULTS = 12
+cart = set()
 app = Flask(__name__)
 
 @dataclass
@@ -26,13 +35,6 @@ class Recommendation:
     title: str
     highlight: bool
     distance: float
-
-@dataclass
-class Item:
-    id : int
-    image: str
-    title : str
-
 
 
 @app.route('/favicon.ico')
@@ -49,14 +51,17 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in {'jpg', 'jpeg', 'png'}
 
 def embed_image(image_path):
-    # random 512 dim vector
-    # TODO: implement
-    return np.random.rand(512)
+    image = preprocess(Image.open(image_path)).unsqueeze(0).to(device)
+    with torch.no_grad():
+        image_features = model.encode_image(image)
+    return image_features.cpu().numpy().reshape(-1)
+
 
 def embed_text(text):
-    # random 512 dim vector
-    # TODO: implement
-    return np.random.rand(512)
+    text = clip.tokenize([text]).to(device)
+    with torch.no_grad():
+        text_features = model.encode_text(text)
+    return text_features.cpu().numpy().reshape(-1)
 
 @app.route('/imgsearch', methods=['POST','GET'])
 def imgsearch():
@@ -71,13 +76,15 @@ def imgsearch():
         filename = secure_filename(file.filename)
         file.save(upload_dir/filename)
 
-        vec = embed_image(upload_dir/filename)
+        query_vec = embed_image(upload_dir/filename)
+        cart_vec = np.mean(sim.get_items(cart))
+        vec=query_vec*0.8+cart_vec*0.2
         (upload_dir/filename).unlink()
         dists, ids = sim.search(vec ,NUMBER_OF_RESULTS)
         df_results = df[df["id"].isin(ids)]
 
         recs=[
-            Recommendation(row["id"],row["primary_image"],row["title"], False,round(d*100,3))
+            Recommendation(row["id"],row["primary_image"],row["title"], row["id"] in cart,round(d*100,3))
             for d,(idx,row) in sorted(zip(dists,df_results.iterrows()))
         ]
         return render_template('index.html', items=recs, recommendations=recs)
@@ -93,15 +100,26 @@ def index():
 @app.route('/txtsearch', methods=['POST'])
 def txtsearch():
     txt = str(request.form.get('txt', ""))
-    vec = embed_text(txt)
+    query_vec = embed_text(txt)
+    cart_vec = np.mean(sim.get_items(cart))
+    vec=query_vec*0.8+cart_vec*0.2
     dists, ids = sim.search(vec ,NUMBER_OF_RESULTS)
     df_results = df[df["id"].isin(ids)]
 
     recs=[
-        Recommendation(row["id"],row["primary_image"],row["title"], False,round(d*100,3))
+        Recommendation(row["id"],row["primary_image"],row["title"], row["id"] in cart,round(d*100,3))
         for d,(idx,row) in sorted(zip(dists,df_results.iterrows()))
     ]
     return render_template('results.html', recommendations=recs)
+
+@app.route('/cart/<id>', methods=['GET'])
+def add_to_cart(id):
+    if id in cart:
+        cart.remove(id)
+    else:
+        cart.add(id)
+    row = df[df["id"]==id].iloc[0]
+    return render_template('panel.html', rec=Recommendation(row["id"],row["primary_image"],row["title"], row["id"] in cart,0.0))
 
 
 @app.after_request
@@ -120,23 +138,19 @@ def page_not_found(e):
 
 if __name__ == "__main__":
     print("Loading data...")
-    SAMPLE_SIZE = 2000
-    # TODO:
     # with (data_dir/"clip_ids.json").open('r') as f:
-    #    embedding_ids = json.load(f)
+    with (data_dir/"clip_ids_2k.json").open('r') as f:
+       embedding_ids = json.load(f)
     df = pd.read_parquet(data_dir/"product_images.parquet")  
     df=df[df["primary_image"].str.endswith(".jpg")|df["primary_image"].str.endswith(".png")].rename(columns={"asin":"id"})
-    # TODO: remove this line and read the proper ids
-    embedding_ids = list(df["id"].sample(SAMPLE_SIZE))
     df["title"]=df["title"].fillna("")
     df["has_emb"]=df["id"].isin(embedding_ids)
     df=df[df["has_emb"]]
 
     print("Indexing...")
     sim = SciKitIndex("cosine",512)
-    # TODO:
     # item_embedding = np.load(data_dir/"clip_emb.npy")
-    item_embedding = np.random.random((SAMPLE_SIZE,512))
+    item_embedding = np.load(data_dir/"clip_emb_2k.npy")
     sim.add_items(item_embedding, embedding_ids)
     sim.init()
     

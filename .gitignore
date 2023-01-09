@@ -137,3 +137,5 @@ data/*.json
 *.npy
 data/clip_emb/
 upload/
+*.sh
+*.txt
